@@ -27,7 +27,7 @@ const server = http.createServer((req, res) => {
         res.end(JSON.stringify(product));
       } else {
         res.statusCode = 404;
-        res.end(`Product with ID ${id} not found`);
+        res.end(`Product with ID ${id} Tenzey couldn't Find`);
       }
     } else if (method === 'POST' && url === '/products') {
       // POST /products: Create a new product
@@ -121,7 +121,7 @@ const server = http.createServer((req, res) => {
     res.statusCode = 500;
     res.end('Internal Server Error');
   } finally {
-    // Clean up resources here
+    
   }
 });
 
