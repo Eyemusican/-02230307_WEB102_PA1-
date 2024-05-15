@@ -114,7 +114,7 @@ const server = http.createServer((req, res) => {
       }
     } else {
       res.statusCode = 404;
-      res.end('Tenzey cannot find');
+      res.end('Tenzey cannot understand');
     }
   } catch (err) {
     console.error(err);
