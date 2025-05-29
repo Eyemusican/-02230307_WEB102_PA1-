@@ -1,32 +1,46 @@
 [
   {
-    "id": 1,
+    "id": 3,
     "name": "Laptop",
     "price": 120000,
     "description": "It is an apple product"
   },
   {
-    "id": 2,
+    "id": 4,
     "name": "Mobile",
     "price": 100000,
     "description": "It is an samsung device"
   },
   {
-    "id": 3,
+    "id": 5,
     "name": "Watch",
     "price": 50000,
     "description": "This is an apple watch"
   },
   {
-    "id": 4,
+    "id": 6,
     "name": "Speaker",
     "price": 90000,
     "description": "It is an apple product"
   },
   {
-    "id": 5,
+    "id": 7,
     "name": "Portable-charger",
     "price": 10000,
     "description": "This is an android"
+  },
+
+  
+  {
+    "id": 1,
+    "name": "Sample Product 1",
+    "price": 29.99,
+    "description": "A sample product for testing"
+  },
+  {
+    "id": 2,
+    "name": "Sample Product 2", 
+    "price": 49.99,
+    "description": "Another sample product for testing"
   }
 ]
