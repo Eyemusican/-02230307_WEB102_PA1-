@@ -22,23 +22,23 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing npm dependencies...'
-                sh 'npm install'
+                bat 'npm install'
             }
         }
         
         stage('Verify Setup') {
             steps {
                 echo 'Verifying Node.js and npm versions...'
-                sh 'node --version'
-                sh 'npm --version'
-                sh 'ls -la'  // List files to verify structure
+                bat 'node --version'
+                bat 'npm --version'
+                bat 'dir'  // List files to verify structure
             }
         }
         
         stage('Test') {
             steps {
                 echo 'Running tests with reporting...'
-                sh 'npm run test:ci'
+                bat 'npm run test:ci'
             }
             post {
                 always {
@@ -67,14 +67,14 @@ pipeline {
         stage('Code Quality') {
             steps {
                 echo 'Running code quality checks...'
-                sh 'npm run lint || true'  // Don't fail build on lint errors
+                bat 'npm run lint || exit /b 0'  // Don't fail build on lint errors (Windows equivalent)
             }
         }
         
         stage('Build') {
             steps {
                 echo 'Building application...'
-                sh 'npm run build'
+                bat 'npm run build'
                 
                 // Verify products.json exists or create it
                 script {
@@ -106,20 +106,19 @@ pipeline {
             steps {
                 echo 'Testing server startup...'
                 script {
-                    // Test that server can start without errors
-                    sh '''
-                        timeout 10s node server.js &
-                        SERVER_PID=$!
-                        sleep 3
+                    // Test that server can start without errors (Windows version)
+                    bat '''
+                        @echo off
+                        start /b node server.js
+                        timeout /t 3 > nul
                         
-                        # Test if server is responding
-                        curl -f http://localhost:3000/ || echo "Server health check failed"
+                        REM Test if server is responding
+                        curl -f http://localhost:3000/ || echo Server health check failed
                         
-                        # Kill the test server
-                        kill $SERVER_PID 2>/dev/null || true
-                        wait $SERVER_PID 2>/dev/null || true
+                        REM Kill the test server
+                        taskkill /f /im node.exe > nul 2>&1 || echo No node processes to kill
                         
-                        echo "Server startup test completed"
+                        echo Server startup test completed
                     '''
                 }
             }
@@ -134,12 +133,12 @@ pipeline {
             }
             steps {
                 echo 'Preparing for deployment...'
-                sh 'echo "Deployment would happen here"'
-                sh 'echo "API server is ready for deployment"'
+                bat 'echo Deployment would happen here'
+                bat 'echo API server is ready for deployment'
                 
                 // Example deployment commands (uncomment and modify as needed):
-                // sh 'scp server.js products.json package.json user@server:/path/to/app/'
-                // sh 'ssh user@server "cd /path/to/app && npm install --production && pm2 restart api-server"'
+                // bat 'scp server.js products.json package.json user@server:/path/to/app/'
+                // bat 'ssh user@server "cd /path/to/app && npm install --production && pm2 restart api-server"'
             }
         }
     }
@@ -148,7 +147,7 @@ pipeline {
         always {
             echo 'Cleaning up workspace...'
             // Clean up any test files but keep important artifacts
-            sh 'rm -f test-products.json junit.xml || true'
+            bat 'del /f /q test-products.json junit.xml 2>nul || echo Nothing to clean'
         }
         success {
             echo '✅ Pipeline completed successfully!'
