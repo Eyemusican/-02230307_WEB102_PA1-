@@ -48,14 +48,8 @@ pipeline {
                     // Archive coverage reports if available
                     script {
                         if (fileExists('coverage/lcov-report/index.html')) {
-                            publishHTML([
-                                allowMissing: false,
-                                alwaysLinkToLastBuild: true,
-                                keepAll: true,
-                                reportDir: 'coverage/lcov-report',
-                                reportFiles: 'index.html',
-                                reportName: 'Coverage Report'
-                            ])
+                            echo 'Coverage report generated at: coverage/lcov-report/index.html'
+                            archiveArtifacts artifacts: 'coverage/**/*', allowEmptyArchive: true
                         } else {
                             echo 'No coverage report found'
                         }
